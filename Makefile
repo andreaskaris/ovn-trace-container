@@ -11,7 +11,7 @@ exec:
 	podman exec -it ovn /bin/bash
 
 plot:
-	/bin/bash plot.sh $(FILTER)
+	/bin/bash plot.sh "$(FILTER)"
 
 stop:
 	podman stop ovn
