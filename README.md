@@ -73,3 +73,10 @@ It will take a while to execute the commands, and one will see a few warning:
 ~~~
 make stop
 ~~~
+
+## Plot the topology
+
+Run:
+~~~
+make plot
+~~~
