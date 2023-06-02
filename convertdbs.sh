@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DB_DIR=/tmp/ovn-databases
+DB_DIR=/etc/ovn
 NBDB=ovnnb_db.db
 SBDB=ovnsb_db.db
 if $(ovsdb-tool db-is-clustered ${DB_DIR}/${NBDB}) ; then
