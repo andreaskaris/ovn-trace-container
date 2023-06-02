@@ -1,5 +1,5 @@
 build:
-	buildah bud -t ovn .
+	podman build -t ovn .
 
 convertdbs:
 	podman run --rm --name ovn --volume /tmp/ovn-databases:/etc/ovn:Z,U --entrypoint="" -it ovn /scripts/convertdbs.sh
