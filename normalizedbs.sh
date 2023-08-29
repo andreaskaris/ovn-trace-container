@@ -1,16 +1,26 @@
 #!/bin/bash
+# Extract databases in the same location, and rename them for legacy mode.
 
 DB_DIR=/etc/ovn
 MG_NBDB=leader_nbdb
 MG_SBDB=leader_sbdb
-NBDB=ovnnb_db.db
-SBDB=ovnsb_db.db
+NBDB=ovnnb_db
+SBDB=ovnsb_db
+MG_ICDB=ovnk_database_store.tar.gz
 
-if [ -f "${DB_DIR}/${MG_NBDB}".gz ]; then
-    gunzip "${DB_DIR}/${MG_NBDB}".gz
-    mv "${DB_DIR}/${MG_NBDB}" "${DB_DIR}/${NBDB}"
+pushd "${DB_DIR}" || exit
+
+# Legacy mode.
+if [ -f "${MG_NBDB}".gz ]; then
+    gunzip "${MG_NBDB}".gz
+    mv "${MG_NBDB}" "${NBDB}"
 fi
-if [ -f "${DB_DIR}/${MG_SBDB}".gz ]; then
-    gunzip "${DB_DIR}/${MG_SBDB}".gz
-    mv "${DB_DIR}/${MG_SBDB}" "${DB_DIR}/${SBDB}"
+if [ -f "${MG_SBDB}".gz ]; then
+    gunzip "${MG_SBDB}".gz
+    mv "${MG_SBDB}" "${SBDB}"
+fi
+
+# OVN IC.
+if [ -f "${MG_ICDB}" ]; then
+    tar --strip-components 1 -xf "${MG_ICDB}"
 fi
