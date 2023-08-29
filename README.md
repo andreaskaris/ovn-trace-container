@@ -1,30 +1,14 @@
-## Preparing the NB and SB databases
-
-Put the NB and SB databases into folder /tmp/ovn-databases
-~~~
-$ find /tmp/ovn-databases/
-/tmp/ovn-databases/
-/tmp/ovn-databases/ovnsb_db.db
-/tmp/ovn-databases/ovnnb_db.db
-~~~
-
 ## Building the container
 
 ~~~
 make build
 ~~~
 
-## Convert the databases to standalone
-
-For clustered environments, the DBs must be converted to standalone:
-~~~
-make convertdbs
-~~~
-
 ## Run the container
 
+You can run the container with the following command, where DB_LOCATION is the path to the must-gather:
 ~~~
-make run
+make run DB_LOCATION=must-gather/network_logs/
 ~~~
 
 Check the logs, everything should be ok:
