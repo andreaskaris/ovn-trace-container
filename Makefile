@@ -1,4 +1,5 @@
 DB_LOCATION ?= /tmp/ovn-databases
+OUTPUT_DIR ?= $(shell pwd)/output
 
 build: # Build the container.
 	podman build -t ovn .
@@ -10,19 +11,19 @@ convertdbs: normalizedbs # Convert the databases from clustered to standalone. S
 	podman run --rm --name ovn --volume $(DB_LOCATION):/etc/ovn:Z,U --entrypoint="" -it ovn /scripts/convertdbs.sh
 
 run: convertdbs # Run the container. Specify DB_LOCATION for a custom location, default /tmp/ovn-databases.
-	podman run --rm --name ovn -d -p 39641:9641 -p 39642:9642 --volume $(DB_LOCATION):/etc/ovn:Z,U -it ovn /scripts/entrypoint.sh
+	podman run --rm --name ovn -d --volume $(OUTPUT_DIR):/output:Z,U --volume $(DB_LOCATION):/etc/ovn:Z,U -it ovn /scripts/entrypoint.sh
 
 exec: # Connect to the container for interactive analysis.
 	podman exec -it ovn /bin/bash
 
-plot: # Generate a plot of the OVN databases.
-	/bin/bash plot.sh "$(FILTER)"
+plot: clean-plot # Generate a plot of the OVN databases.
+	podman exec -it ovn /usr/bin/ovnkube-plot.sh "$(FILTER)"
+
+clean-plot:
+	rm -f output/*
 
 stop: # Stop the container.
 	podman stop ovn
-
-remove: # Remove the container.
-	podman rm ovn
 
 logs: # Print logs.
 	podman logs ovn

@@ -1,10 +1,17 @@
 #!/bin/bash
+# Entrypoint for the OVN trace container.
 
-if [ -f /etc/ovn/ovnnb_db.db ]; then
-	ovsdb-server -vconsole:info -vfile:off --log-file=/var/log/ovn/ovsdb-server-nb.log --remote=punix:/var/run/ovn/ovnnb_db.sock --pidfile=/var/run/ovn/ovnnb_db.pid --unixctl=/var/run/ovn/ovnnb_db.ctl --remote=ptcp:9641 /etc/ovn/ovnnb_db.db &
-fi
+# OVN IC mode
+port=9641
+for f in /etc/ovn/ovnnb_db /etc/ovn/ovnsb_db /etc/ovn/*bdb; do
+    bn=$(basename "${f}")
+	ovsdb-server -vconsole:info -vfile:off --log-file="/var/log/ovn/${bn}.log" \
+        --remote="punix:/var/run/ovn/${bn}.sock" \
+        --pidfile="/var/run/ovn/${bn}.pid" \
+        --unixctl="/var/run/ovn/${bn}.ctl" \
+        --remote="ptcp:${port}" \
+        "/etc/ovn/${bn}" &
+    port=$((port+1))
+done
 
-if [ -f /etc/ovn/ovnsb_db.db ]; then
-	ovsdb-server -vconsole:info -vfile:off --log-file=/var/log/ovn/ovsdb-server-sb.log --remote=punix:/var/run/ovn/ovnsb_db.sock --pidfile=/var/run/ovn/ovnsb_db.pid --unixctl=/var/run/ovn/ovnsb_db.ctl --remote=ptcp:9642 /etc/ovn/ovnsb_db.db &
-fi
 sleep infinity
