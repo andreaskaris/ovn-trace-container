@@ -1,4 +1,4 @@
-FROM docker.io/library/golang:1.17
+FROM docker.io/library/golang:1.24
 WORKDIR /builddir
 RUN git clone https://github.com/andreaskaris/ovnkube-plot.git .
 RUN make

@@ -3,7 +3,7 @@
 
 # OVN IC mode
 port=9641
-for f in /etc/ovn/ovnnb_db /etc/ovn/ovnsb_db /etc/ovn/*bdb; do
+for f in /etc/ovn/*db; do
     bn=$(basename "${f}")
 	ovsdb-server -vconsole:info -vfile:off --log-file="/var/log/ovn/${bn}.log" \
         --remote="punix:/var/run/ovn/${bn}.sock" \

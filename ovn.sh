@@ -25,11 +25,11 @@ fi
 
 if [ "${COMMAND}" == "--list" ]; then
     if [ "${OVN_COMMAND}" == "ovn-nbctl" ]; then
-        for f in /var/run/ovn/*nbdb.sock; do
+        for f in /var/run/ovn/*nb*.sock; do
             basename "${f}" | sed 's/\.sock$//'
         done
     else
-        for f in /var/run/ovn/*sbdb.sock; do
+        for f in /var/run/ovn/*sb*.sock; do
             basename "${f}" | sed 's/\.sock$//'
         done
     fi
